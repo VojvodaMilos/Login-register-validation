@@ -9,3 +9,7 @@
 .view.activeView {
     display: block;
 }
+
+.msgLogin {
+    color: red;
+}
