@@ -6,12 +6,25 @@ const btnRegisterView = registerView.querySelector("button");
 const btnLoginView = loginView.querySelector("button");
 const form = document.querySelector("#subForm")
 const msgLogin = document.querySelector(".msgLogin")
+const navLogin = document.querySelector(".login")
+const navRegister = document.querySelector(".register")
 let dataUser = {};
 let loginUser = {}
 let errorList = {};
 let existsError = false
 
 let userDB = []
+/////////navigation////////////////////////////////////////////////////////
+navRegister.addEventListener("click", ()=>changeView(loginView,registerView))
+navLogin.addEventListener("click", ()=>changeView(registerView, loginView))
+
+function changeView(a,b){
+    a.classList.remove("activeView")
+    b.classList.add("activeView")
+
+}
+
+
 
 //////////register view ///////////////////////////////////////////////////
 btnRegisterView.addEventListener("click", btnHandlerButton)
@@ -28,12 +41,18 @@ function btnHandlerButton(e) {
     if (validationForm()) {
         userDB.push(dataUser)
         dataUser = {}
-    } else {
-        console.log("Not validation")
-    }
+
+        registerView.querySelectorAll(".clear").forEach(e=>e.value="")
+        navRegister.classList.remove("activeView")
+        navLogin.classList.add("activeView")
+
+    } 
 }
 
 function validationForm() {
+   
+    existsError=false
+
     if (!dataUser.firstName) {
         existsError = true;
         errorList.firstName = "First name is required"
@@ -59,11 +78,17 @@ function validationForm() {
         for (const key in errorList) {
             registerView.querySelector(`input[name='${key}']`).classList.add("errorInput")
         }
+    }else{
+        for (const key in errorList) {
+            registerView.querySelector(`input[name='${key}']`).classList.remove("errorInput")
+            
+        }
+        errorList={}
     }
     return !existsError
 }
 
-//////Login view //////////////////////////////////////////////////////////////
+// //////Login view //////////////////////////////////////////////////////////////
 btnLoginView.addEventListener("click", btnLoginHandler)
 
 function btnLoginHandler(e) {
@@ -75,19 +100,13 @@ function btnLoginHandler(e) {
         loginUser[loginKey] = loginValue
 
     })
-    // console.log(validationLogin());
     if (validationLogin()) {
         findUser()
-    } else {
-        console.log("error exist");
-    }
+    } 
 
 }
 
 function findUser() {
-    console.log(loginUser);
-    console.log(loginUser);
-
     if (userDB.length !== 0) {
         for (const user of userDB) {
             if (user.email === loginUser.email && user.password === loginUser.password) {
@@ -104,7 +123,7 @@ function findUser() {
 
 function validationLogin() {
     existsError = false
-    errorList = {}
+    
 
     loginView.querySelector(`input`).classList.remove("errorInput");
 
@@ -112,18 +131,23 @@ function validationLogin() {
     if (!loginUser.email.includes("@")) {
         existsError = true;
         errorList.email = "Email is not valid"
-        console.log("11111111111");
     }
 
     if (!loginUser.password) {
         existsError = true;
         errorList.password = "Password is required"
-        console.log("222222222")
     }
-
+if(existsError){
     for (const key in errorList) {
         loginView.querySelector(`input[name='${key}']`).classList.add("errorInput");
     }
 
+}else{
+    for (const key in errorList) {
+        loginView.querySelector(`input[name='${key}']`).classList.remove("errorInput");
+}
+errorList = {}
+}
+    
     return !existsError
 }
