@@ -15,10 +15,10 @@ let existsError = false
 
 let userDB = []
 /////////navigation////////////////////////////////////////////////////////
-navRegister.addEventListener("click", ()=>changeView(loginView,registerView))
-navLogin.addEventListener("click", ()=>changeView(registerView, loginView))
+navRegister.addEventListener("click", () => changeView(loginView, registerView))
+navLogin.addEventListener("click", () => changeView(registerView, loginView))
 
-function changeView(a,b){
+function changeView(a, b) {
     a.classList.remove("activeView")
     b.classList.add("activeView")
 
@@ -42,16 +42,16 @@ function btnHandlerButton(e) {
         userDB.push(dataUser)
         dataUser = {}
 
-        registerView.querySelectorAll(".clear").forEach(e=>e.value="")
+        registerView.querySelectorAll(".clear").forEach(e => e.value = "")
         navRegister.classList.remove("activeView")
         navLogin.classList.add("activeView")
 
-    } 
+    }
 }
 
 function validationForm() {
-   
-    existsError=false
+
+    existsError = false
 
     if (!dataUser.firstName) {
         existsError = true;
@@ -78,12 +78,12 @@ function validationForm() {
         for (const key in errorList) {
             registerView.querySelector(`input[name='${key}']`).classList.add("errorInput")
         }
-    }else{
+    } else {
         for (const key in errorList) {
             registerView.querySelector(`input[name='${key}']`).classList.remove("errorInput")
-            
+
         }
-        errorList={}
+        errorList = {}
     }
     return !existsError
 }
@@ -102,7 +102,8 @@ function btnLoginHandler(e) {
     })
     if (validationLogin()) {
         findUser()
-    } 
+        loginView.querySelectorAll(".clear").forEach(e => e.value = "")
+    }
 
 }
 
@@ -123,7 +124,7 @@ function findUser() {
 
 function validationLogin() {
     existsError = false
-    
+
 
     loginView.querySelector(`input`).classList.remove("errorInput");
 
@@ -137,17 +138,17 @@ function validationLogin() {
         existsError = true;
         errorList.password = "Password is required"
     }
-if(existsError){
-    for (const key in errorList) {
-        loginView.querySelector(`input[name='${key}']`).classList.add("errorInput");
+    if (existsError) {
+        for (const key in errorList) {
+            loginView.querySelector(`input[name='${key}']`).classList.add("errorInput");
+        }
+
+    } else {
+        for (const key in errorList) {
+            loginView.querySelector(`input[name='${key}']`).classList.remove("errorInput");
+        }
+        errorList = {}
     }
 
-}else{
-    for (const key in errorList) {
-        loginView.querySelector(`input[name='${key}']`).classList.remove("errorInput");
-}
-errorList = {}
-}
-    
     return !existsError
 }
